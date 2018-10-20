@@ -7,15 +7,18 @@
     "babel-node": "NODE_PATH=. ./node_modules/.bin/babel-node index.js",
     "dev": "NODE_PATH=. nodemon --exec npm run babel-node -- index.js",
     "start": "NODE_PATH=. babel-node index.js",
-    "test": "NODE_PATH=. nyc ./node_modules/mocha/bin/mocha --require babel-register 'test/**/*.test.js' && ./node_modules/.bin/eslint index.js"
+    "test": "NODE_PATH=. nyc ./node_modules/mocha/bin/mocha --timeout 30000 --require babel-register --require babel-polyfill test/**/*.test.js && ./node_modules/.bin/eslint index.js"
   },
   "author": "wingleungchoi",
   "license": "MIT",
   "dependencies": {
-    "koa": "^2.5.3"
+    "dotenv": "^6.1.0",
+    "koa": "^2.5.3",
+    "mysql": "^2.16.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "eslint": "^5.7.0",
