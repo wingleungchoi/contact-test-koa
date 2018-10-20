@@ -1,0 +1,5 @@
+Building Docker image
+- `docker build -t wingleungchoi/node-web-app .`
+
+Run the image
+- `docker run -p 49160:3000 -d wingleungchoi/node-web-app`
