@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/babel-node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "babel-node": "./node_modules/.bin/babel-node index.js",
+    "dev": "nodemon --exec npm run babel-node -- index.js",
+    "start": "babel-node index.js",
+    "test": "nyc ./node_modules/mocha/bin/mocha --require babel-register && ./node_modules/.bin/eslint index.js"
   },
   "author": "wingleungchoi",
   "license": "MIT",
@@ -14,6 +16,13 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4",
+    "nyc": "^13.1.0"
   }
 }
