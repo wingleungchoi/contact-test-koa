@@ -9,18 +9,15 @@ jobs: # a collection of steps
       - run:
           name: update-npm 
           command: 'sudo npm install -g npm@latest'
-      - restore_cache: # special step to restore the dependency cache 
-          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: install-npm-wee
           command: npm install
-      - save_cache: # special step to save the dependency cache
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
       - run: # run tests
           name: test
           command: npm test
+      - run: # run check style
+          name: check-style
+          command: npm run check-style
       - run: # run coverage report
           name: code-coverage
           command: './node_modules/.bin/nyc report --reporter=text-lcov'
