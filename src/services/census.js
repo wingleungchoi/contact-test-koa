@@ -1,10 +1,27 @@
 import * as dotenv from 'dotenv';
 import * as mysql from 'mysql';
+import * as R from 'ramda';
 import util from 'util';
+
+import { DEMONGRAPHIC_COLUMNS } from 'src/enum/census';
 
 dotenv.config();
 
-const groupBy = async () => {
+const checkExistingDemographicColumn = (demographicColumn) => {
+  const lowercaseDemographicColumn = R.toLower(demographicColumn);
+  return R.contains(lowercaseDemographicColumn, DEMONGRAPHIC_COLUMNS);
+};
+
+const groupBy = async (demographicColumn) => {
+  if (!checkExistingDemographicColumn(demographicColumn)) {
+    return {
+      success: false,
+      error: {
+        message: 'No valid params',
+        errors: [],
+      },
+    };
+  }
   const pool = mysql.createPool({
     connectionLimit: 10,
     host: process.env.BIRDTEST_MYSQL_HOST,
@@ -17,9 +34,9 @@ const groupBy = async () => {
   pool.query = util.promisify(pool.query);
 
   const results = await pool.query(`
-    SELECT COUNT(age), education, AVG(age)
+    SELECT COUNT(age), ${demographicColumn}, AVG(age)
     FROM census_learn_sql
-    GROUP BY education
+    GROUP BY ${demographicColumn}
     ORDER BY COUNT(age) DESC
     LIMIT 100
   `);
