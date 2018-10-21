@@ -1,6 +1,8 @@
 import * as censusService from 'src/services/census';
+import { pool } from 'src/libs/db';
 
 import chai from 'chai';
+import sinon from 'sinon';
 
 const { expect, } = chai;
 
@@ -19,7 +21,6 @@ describe('censusService', async () => {
     });
 
     it('should return 1. number of lines with this value, 2. "age" value average for each different value in this column', async () => {
-      const result = await censusService.groupBy('education');
       const expectResult = {
         success: true,
         data: [
@@ -110,6 +111,8 @@ describe('censusService', async () => {
           }
         ],
       };
+      sinon.stub(pool, 'query').resolves(expectResult.data);
+      const result = await censusService.groupBy('education');
       expect(result).to.eql(expectResult);
     });
   });
