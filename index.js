@@ -1,12 +1,18 @@
-import * as dotenv from 'dotenv';
+/* eslint-disable no-unused-vars */
+import * as setEnVar from 'src/libs/setEnvVar';
 import Koa from 'koa';
+import koaBody from 'koa-body';
 
-dotenv.config();
+import router from 'src/router';
 
 const app = new Koa();
 
-app.use(async (ctx) => {
-  ctx.body = 'Hello World!';
-});
+app.use(koaBody({
+  multipart: true,
+  jsonLimit: '5mb',
+  formLimit: '5mb',
+}));
+
+app.use(router.routes());
 
 app.listen(3000);

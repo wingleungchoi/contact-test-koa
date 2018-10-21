@@ -21,9 +21,9 @@ const groupBy = async (demographicColumn, pool = DB.pool) => {
 
   try {
     const results = await pool.query(`
-      SELECT ${demographicColumn}, COUNT(age) as count, AVG(age) as averageAge
+      SELECT \`${demographicColumn}\`, COUNT(age) as count, AVG(age) as averageAge
       FROM census_learn_sql
-      GROUP BY ${demographicColumn}
+      GROUP BY \`${demographicColumn}\`
       ORDER BY COUNT(age) DESC
       LIMIT 100
     `);
