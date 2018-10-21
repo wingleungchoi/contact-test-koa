@@ -1,28 +1,28 @@
 import { STATUS } from 'src/enum/response';
 
 export default {
-  ok(koa, payload) {
-    koa.body = {
+  ok(ctx, payload) {
+    ctx.body = {
       meta: {
         status: STATUS.OK,
-        version: koa.state.version,
+        version: ctx.state.version,
       },
       data: payload,
     };
   },
-  notFound(koa) {
-    koa.body = {
+  notFound(ctx) {
+    ctx.body = {
       meta: {
         status: STATUS.NOT_FOUND,
-        version: koa.state.version,
+        version: ctx.state.version,
       },
     };
   },
-  error(koa, error) {
-    koa.body = {
+  error(ctx, error) {
+    ctx.body = {
       meta: {
         status: error.status,
-        version: koa.state.version,
+        version: ctx.state.version,
       },
       error: {
         message: error.message,
