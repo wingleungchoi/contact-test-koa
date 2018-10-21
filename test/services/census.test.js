@@ -108,7 +108,7 @@ describe('censusService', async () => {
             count: 724,
             averageAge: 54.2831,
           }
-        ]
+        ],
       };
       expect(result).to.eql(expectResult);
     });

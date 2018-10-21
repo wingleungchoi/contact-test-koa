@@ -1,8 +1,5 @@
-import * as dotenv from 'dotenv';
 import * as mysql from 'mysql';
 import util from 'util';
-
-dotenv.config();
 
 const pool = mysql.createPool({
   connectionLimit: 10,

@@ -1,4 +1,7 @@
+import * as dotenv from 'dotenv';
 import Koa from 'koa';
+
+dotenv.config();
 
 const app = new Koa();
 
