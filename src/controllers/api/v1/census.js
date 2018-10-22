@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import response from 'src/libs/response';
 import * as censusService from 'src/services/census';
+import { DEMONGRAPHIC_COLUMNS } from 'src/enum/census';
 
 const groupBy = async (ctx) => {
   const demographicColumn = R.prop('demographicColumn', ctx.request.body);
@@ -10,10 +11,15 @@ const groupBy = async (ctx) => {
     : response.error(ctx, (result.error) ? result.error : {});
 };
 
+const demographicColumns = ctx => response.ok(ctx, DEMONGRAPHIC_COLUMNS);
+
+
 export {
-  groupBy
+  groupBy,
+  demographicColumns
 };
 
 export default {
   groupBy,
+  demographicColumns,
 };
