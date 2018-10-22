@@ -111,9 +111,10 @@ describe('censusService', async () => {
           }
         ],
       };
-      sinon.stub(pool, 'query').resolves(expectResult.data);
+      const stub = sinon.stub(pool, 'query').resolves(expectResult.data);
       const result = await censusService.groupBy('education');
       expect(result).to.eql(expectResult);
+      stub.restore();
     });
   });
 });
