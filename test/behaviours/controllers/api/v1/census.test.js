@@ -123,5 +123,27 @@ describe('routes: api: v1: census', () => {
       expect(res.body.data).to.eql(expectResult);
       stub.restore();
     });
+
+    it('should return the error when column is incorrect', async () => {
+      const expectResult = {
+        meta: {
+          status: 400,
+          version: '1',
+        },
+        error: {
+          message: 'No valid params',
+          errors: [],
+        },
+      };
+      const res = await chai
+        .request(server)
+        .post('/api/v1/census/groupBy')
+        .send({
+          demographicColumn: '1=1',
+        });
+      expect(res.status).to.eql(200);
+      expect(res.type).to.eql('application/json');
+      expect(res.body).to.eql(expectResult);
+    });
   });
 });

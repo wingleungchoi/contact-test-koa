@@ -21,7 +21,7 @@ export default {
   error(ctx, error) {
     ctx.body = {
       meta: {
-        status: error.status,
+        status: STATUS.ERROR,
         version: ctx.state.version,
       },
       error: {
