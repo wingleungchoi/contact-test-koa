@@ -15,4 +15,12 @@ app.use(koaBody({
 
 app.use(router.routes());
 
-app.listen(3000);
+const server = app.listen(3000);
+
+export {
+  server
+};
+
+export default {
+  server,
+};
