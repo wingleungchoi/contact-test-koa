@@ -5,10 +5,19 @@ import { DEMONGRAPHIC_COLUMNS } from 'src/enum/census';
 
 const groupBy = async (ctx) => {
   const demographicColumn = R.prop('demographicColumn', ctx.request.body);
-  const result = await censusService.groupBy(demographicColumn);
-  return (result.success)
-    ? response.ok(ctx, (result.data) ? result.data : [])
-    : response.error(ctx, (result.error) ? result.error : {});
+  try {
+    const result = await censusService.groupBy(demographicColumn);
+    return (result.success)
+      ? response.ok(ctx, (result.data) ? result.data : [])
+      : response.error(ctx, (result.error) ? result.error : {});
+  } catch (error) {
+    // TODO send email/slack to tech team about error.
+    // for controlling scope of technical exercise, i did not do this TODO.
+    return response.error(ctx, {
+      message: 'There is something wrong in server. We are fixing it.',
+      errors: [],
+    });
+  }
 };
 
 const demographicColumns = ctx => response.ok(ctx, DEMONGRAPHIC_COLUMNS);

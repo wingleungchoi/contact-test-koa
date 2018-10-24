@@ -1,13 +1,15 @@
 import * as mysql from 'mysql';
 import util from 'util';
 
+import config from 'src/config/index';
+
 const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.BIRDTEST_MYSQL_HOST,
-  port: process.env.BIRDTEST_MYSQL_PORT,
-  user: process.env.BIRDTEST_MYSQL_USER,
-  password: process.env.BIRDTEST_MYSQL_PASSWORD,
-  database: process.env.BIRDTEST_MYSQL_DATABASE,
+  connectionLimit: config.db.connectionLimit,
+  host: config.db.host,
+  port: config.db.port,
+  user: config.db.user,
+  password: config.db.password,
+  database: config.db.database,
 });
 
 /*
