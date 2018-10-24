@@ -34,6 +34,14 @@ app.use(async (ctx, next) => {
 
 app.use(router.routes());
 
+app.on('error', (err, ctx) => {
+  console.error(err);
+  /* centralized error handling:
+    TODO send email/slack to tech team about error.
+    for controlling scope of technical exercise, i did not do this TODO.
+  */
+});
+
 const server = app.listen(config.port);
 
 console.log(`Listening to Port ${config.port}`);

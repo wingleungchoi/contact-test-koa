@@ -12,7 +12,7 @@ const groupBy = async (ctx) => {
       : response.error(ctx, (result.error) ? result.error : {});
   } catch (error) {
     // TODO send email/slack to tech team about error.
-    // for control scope of technical exercise, i did not do this TODO.
+    // for controlling scope of technical exercise, i did not do this TODO.
     return response.error(ctx, {
       message: 'There is something wrong in server. We are fixing it.',
       errors: [],
