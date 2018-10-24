@@ -1,4 +1,5 @@
 const config = {
+  connectionLimit: 10,
   port: process.env.PORT,
   hostsWhitelist: process.env.HOSTS.split(','),
   db: {
