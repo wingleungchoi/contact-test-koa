@@ -1,5 +1,14 @@
+To start up
+- require: node verson v8.10.0
+- $ git clone git@github.com:wingleungchoi/bird-test-backend.git
+- $ cd bird-test-backend
+- $ npm i
+- $ cp .env-sample .env
+- update the .env file
+- $ npm run start
+
 Building Docker image
-- `docker build -t wingleungchoi/node-web-app .`
+- `docker build -t wingleunchoi/bird-test .`
 
 Run the image
-- `docker run -p 49160:8080 -d wingleungchoi/node-web-app`
+- `docker run -p 80:8080 -d wingleunchoi/bird-test`
