@@ -1,3 +1,11 @@
+# package directories
 node_modules
-.nyc_output
+
+# General environment
 .env
+
+# DB
+config/config.json
+
+# code coverage report
+.nyc_output
