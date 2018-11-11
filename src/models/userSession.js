@@ -21,8 +21,14 @@ module.exports = (sequelize, DATA_TYPES) => {
     averageScore: {
       type: DATA_TYPES.DECIMAL,
       validate: {
-        max: 100,
-        min: 0,
+        max: {
+          args: [100],
+          msg: 'AverageScore must be bewteen 100 and 0',
+        },
+        min: {
+          args: [0],
+          msg: 'AverageScore must be bewteen 100 and 0',
+        },
       },
     },
     timeStudied: {

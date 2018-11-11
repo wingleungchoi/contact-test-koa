@@ -1,8 +1,9 @@
-const R = require('ramda');
+import * as R from 'ramda';
 
-const idExist = R.pipe(R.prop('id'), R.is(String));
+import { idExist, isValidUuid } from 'src/libs/validator';
+import { formatSequelizeDBErrors, getSequelizeDBErrorMessage, isSequelizeValidationError } from 'src/helpers/db';
 
-const create = async ({ sessionModel, userSessionModel }, {
+const create = async ({ sessionModel, userSessionModel, }, {
   userId,
   courseId,
   sessionId,
@@ -10,6 +11,10 @@ const create = async ({ sessionModel, userSessionModel }, {
   averageScore,
   timeStudied,
 }) => {
+  if (!isValidUuid(userId)) {
+    return { success: false, error: { message: 'No valid user', errors: [], }, };
+  }
+
   try {
     // using sequelize vs direct SQL command
     // sequelize: pros easy to maintain cons: extra transaction with DB
@@ -17,11 +22,16 @@ const create = async ({ sessionModel, userSessionModel }, {
     // direct SQL: cons: a bit more efforts are required to maintain
     const sessions = await sessionModel.findAll({
       limit: 1,
-      where: { id: sessionId, courseId },
+      where: { id: sessionId, courseId, },
     });
     const isIalidSessionIdOrNot = ((R.prop('length', sessions) === 1) && R.is(Array, sessions));
     if (!isIalidSessionIdOrNot) {
-      return { success: false, message: 'The session is not belonged to the course' };
+      return {
+        success: false,
+        error: {
+          message: 'The session is not belonged to the course',
+        },
+      };
     }
 
     const userSession = await userSessionModel.create({
@@ -33,11 +43,22 @@ const create = async ({ sessionModel, userSessionModel }, {
       timeStudied,
     });
     if (idExist(userSession.dataValues)) {
-      return { success: true };
+      return { success: true, };
     }
-    return { success: false, message: 'Failed in insert user session' };
+    return {
+      success: false,
+      error: {
+        message: 'Failed in insert user session',
+      },
+    };
   } catch (error) {
-    return { success: false, message: R.propOr('Failed in insert user session', 'message', error) };
+    return {
+      success: false,
+      error: {
+        message: isSequelizeValidationError(error) ? getSequelizeDBErrorMessage(error) : 'Failed in insert user session',
+        errors: isSequelizeValidationError(error) ? formatSequelizeDBErrors(error.errors) : error,
+      },
+    };
   }
 };
 

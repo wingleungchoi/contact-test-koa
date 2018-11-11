@@ -1,10 +1,8 @@
-const chai = require('chai');
+import { expect } from 'chai';
 
-const { factory } = require('test/factories');
-const Models = require('src/models');
-const userSessionService = require('src/services/userSession');
-
-const { expect } = chai;
+import { factory } from 'test/factories';
+import Models from 'src/models';
+import userSessionService from 'src/services/userSession';
 
 describe('userSessionService', async () => {
   beforeEach(async () => {
@@ -34,7 +32,7 @@ describe('userSessionService', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
       const course2 = await factory.create('course');
-      const session = await factory.create('session', {}, { courseId: course.id });
+      const session = await factory.create('session', {}, { courseId: course.id, });
       const result = await userSessionService.create({
         userSessionModel: Models.userSession,
         sessionModel: Models.session,
@@ -47,7 +45,7 @@ describe('userSessionService', async () => {
         timeStudied: 10.1,
       });
       expect(result.success).to.equal(false);
-      expect(result.message).to.equal('The session is not belonged to the course');
+      expect(result.error.message).to.equal('The session is not belonged to the course');
     });
 
     it('should return failure when the data fails in validation', async () => {
@@ -66,7 +64,7 @@ describe('userSessionService', async () => {
         timeStudied: 10.1,
       });
       expect(result.success).to.equal(false);
-      expect(result.message).to.equal('Validation error: Validation max on averageScore failed');
+      expect(result.error.message).to.equal('Validation error: AverageScore must be bewteen 100 and 0');
     });
   });
 });
