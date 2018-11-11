@@ -1,9 +1,9 @@
-import * as census from 'src/controllers/api/v1/census';
+import * as course from 'src/controllers/api/v1/course';
 
 export {
-  census
+  course
 };
 
 export default {
-  census,
+  course,
 };

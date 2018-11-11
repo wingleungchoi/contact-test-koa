@@ -1,14 +1,14 @@
 To start up
 - require: node verson v8.10.0
-- $ git clone git@github.com:wingleungchoi/bird-test-backend.git
-- $ cd bird-test-backend
+- $ git clone git@github.com:wingleungchoi/user-statics-test-koa.git
+- $ cd user-statics-test-koa
 - $ npm i
 - $ cp .env-sample .env
 - update the .env file
 - $ npm run start
 
 Building Docker image
-- `docker build -t wingleunchoi/bird-test .`
+- `docker build -t wingleunchoi/user-statics-test-koa .`
 
 Run the image
-- `docker run -p 80:8080 -d wingleunchoi/bird-test`
+- `docker run -p 80:8080 -d wingleunchoi/user-statics-test-koa`
