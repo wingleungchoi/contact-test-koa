@@ -1,4 +1,4 @@
-// const R = require('ramda');
+// import * as R from 'ramda';
 import userSessionService from 'src/services/userSession';
 import response from 'src/libs/response';
 import Models from 'src/models';

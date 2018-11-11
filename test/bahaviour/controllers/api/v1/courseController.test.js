@@ -89,4 +89,42 @@ describe('routes: api: v1: course', () => {
       expect(res.body).to.eql(expectResult);
     });
   });
+
+  describe('Get Courses', () => {
+    it('should fetches course lifetime statistics', async () => {
+      const user = await factory.create('user');
+      const course = await factory.create('course');
+      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      const userSession1 = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const userSession2 = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const expectResult = {
+        totalModulesStudied:
+          userSession1.dataValues.totalModulesStudied + userSession2.dataValues.totalModulesStudied,
+        averageScore: userSession1.dataValues.averageScore + userSession2.dataValues.averageScore,
+        timeStudied: userSession1.dataValues.timeStudied + userSession2.dataValues.timeStudied,
+      };
+      debugger;
+      const res = await chai
+        .request(server)
+        .get(`/api/v1/course/${course.dataValues.id}`)
+        .set('X-User-Id', user.dataValues.id)
+        .send({
+          sessionId: session.dataValues.id,
+          totalModulesStudied: 1,
+          averageScore: 10.1,
+          timeStudied: 1800000,
+        });
+      expect(res.status).to.eql(201);
+      expect(res.type).to.eql('application/json');
+      expect(res.body.data).to.eql(expectResult);
+    });
+  });
 });
