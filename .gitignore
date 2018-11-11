@@ -5,7 +5,7 @@ node_modules
 .env
 
 # DB
-config/config.json
+src/config/config.json
 
 # code coverage report
 .nyc_output
