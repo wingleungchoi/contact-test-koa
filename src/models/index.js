@@ -1,10 +1,12 @@
-const Sequelize = require('sequelize');
-const config = require('src/config/config.json')[process.env.NODE_ENV || 'development'];
-const user = require('./user');
-const course = require('./course');
-const session = require('./session');
-const courseModule = require('./courseModule');
-const userSession = require('./userSession');
+import Sequelize from 'sequelize';
+import * as configs from 'src/config/config.json';
+import user from 'src/models/user';
+import course from 'src/models/course';
+import session from 'src/models/session';
+import courseModule from 'src/models/courseModule';
+import userSession from 'src/models/userSession';
+
+const config = configs[process.env.NODE_ENV || 'development'];
 
 const sequelize = (config.use_env_variable)
   ? new Sequelize(process.env[config.use_env_variable], config)

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DATA_TYPES) => {
+export default (sequelize, DATA_TYPES) => {
   const courseModule = sequelize.define('CourseModule', {
     id: {
       type: DATA_TYPES.UUID,
