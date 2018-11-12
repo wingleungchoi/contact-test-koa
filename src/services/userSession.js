@@ -20,12 +20,17 @@ const create = async ({ sessionModel, userSessionModel, }, {
     // sequelize: pros easy to maintain cons: extra transaction with DB
     // direct SQL: pros only one transaction with DB
     // direct SQL: cons: a bit more efforts are required to maintain
-    const sessions = await sessionModel.findAll({
-      limit: 1,
+    const session = await sessionModel.findOne({
+      attributes: ['id'],
       where: { id: sessionId, courseId, },
     });
-    const isIalidSessionIdOrNot = ((R.prop('length', sessions) === 1) && R.is(Array, sessions));
-    if (!isIalidSessionIdOrNot) {
+    const isValidSessionIdOrNot = isValidUuid(
+      R.pipe(
+        R.prop('dataValues'),
+        R.prop('id')
+      )(session)
+    );
+    if (!isValidSessionIdOrNot) {
       return {
         success: false,
         error: {
@@ -62,9 +67,9 @@ const create = async ({ sessionModel, userSessionModel, }, {
   }
 };
 
-const getSummary = async ({ userSessionModel, }, {
+const getSummary = async ({ sessionModel, userSessionModel, }, {
   userId,
-  sessionId,
+  courseId,
 }) => {
   if (!isValidUuid(userId)) {
     return { success: false, error: { message: 'No valid user', errors: [], }, };
@@ -72,12 +77,24 @@ const getSummary = async ({ userSessionModel, }, {
 
   try {
     // using sequelize vs direct SQL command
-    // sequelize: pros easy to maintain
-    const userSessions = await userSessionModel.findAll({
-      where: { userId, sessionId, },
+    // sequelize: pros easy to maintain cons: extra transaction with DB
+    // direct SQL: pros only one transaction with DB
+    // direct SQL: cons: a bit more efforts are required to maintain
+    const sessions = await sessionModel.findAll({
+      attributes: ['id'],
+      where: { courseId, },
     });
-    const isIalidSessionIdOrNot = (R.is(Array, userSessions) && (R.prop('length', userSessions) > 0));
-    if (!isIalidSessionIdOrNot) {
+
+    const hasSessionsWithCourseId = (R.is(Array, sessions) && (R.prop('length', sessions) > 0));
+    if (!hasSessionsWithCourseId) {
+      return { success: false, error: { message: 'No valid course', errors: [], }, };
+    }
+    const sessionIs = R.map(session => session.dataValues.id, sessions);
+    const userSessions = await userSessionModel.findAll({
+      where: { userId, sessionId: sessionIs, },
+    });
+    const isValidSessionIdOrNot = (R.is(Array, userSessions) && (R.prop('length', userSessions) > 0));
+    if (!isValidSessionIdOrNot) {
       return {
         success: false,
         error: {

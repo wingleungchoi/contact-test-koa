@@ -84,10 +84,11 @@ describe('userSessionService', async () => {
         { sessionId: session.dataValues.id, userId: user.dataValues.id, }
       );
       const result = await userSessionService.getSummary({
+        sessionModel: Models.session,
         userSessionModel: Models.userSession,
       }, {
         userId: user.dataValues.id,
-        sessionId: session.dataValues.id,
+        courseId: course.dataValues.id,
       });
       expect(result.success).to.equal(true);
       expect(result.data).to.eql({
@@ -101,12 +102,13 @@ describe('userSessionService', async () => {
     it('return errors when a user did not take any session', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
-      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      await factory.create('session', {}, { courseId: course.dataValues.id, });
       const result = await userSessionService.getSummary({
+        sessionModel: Models.session,
         userSessionModel: Models.userSession,
       }, {
         userId: user.dataValues.id,
-        sessionId: session.dataValues.id,
+        courseId: course.dataValues.id,
       });
       expect(result.success).to.equal(false);
       expect(result.error).to.eql({
