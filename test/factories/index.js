@@ -16,6 +16,10 @@ sessionFactory(factory);
 userFactory(factory);
 userSessionFactory(factory);
 
-module.exports = {
+export {
+  factory
+};
+
+export default {
   factory,
 };

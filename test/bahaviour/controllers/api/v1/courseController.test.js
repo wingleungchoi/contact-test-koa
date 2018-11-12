@@ -111,7 +111,6 @@ describe('routes: api: v1: course', () => {
         averageScore: userSession1.dataValues.averageScore + userSession2.dataValues.averageScore,
         timeStudied: userSession1.dataValues.timeStudied + userSession2.dataValues.timeStudied,
       };
-      debugger;
       const res = await chai
         .request(server)
         .get(`/api/v1/course/${course.dataValues.id}`)

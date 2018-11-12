@@ -62,6 +62,60 @@ const create = async ({ sessionModel, userSessionModel, }, {
   }
 };
 
-module.exports = {
+const getSummary = async ({ userSessionModel, }, {
+  userId,
+  sessionId,
+}) => {
+  if (!isValidUuid(userId)) {
+    return { success: false, error: { message: 'No valid user', errors: [], }, };
+  }
+
+  try {
+    // using sequelize vs direct SQL command
+    // sequelize: pros easy to maintain
+    const userSessions = await userSessionModel.findAll({
+      where: { userId, sessionId, },
+    });
+    const isIalidSessionIdOrNot = (R.is(Array, userSessions) && (R.prop('length', userSessions) > 0));
+    if (!isIalidSessionIdOrNot) {
+      return {
+        success: false,
+        error: {
+          message: 'The user does not take the session',
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        totalModulesStudied: R.pipe(
+          R.map(userSession => userSession.dataValues.totalModulesStudied),
+          R.sum
+        )(userSessions),
+        averageScore: R.pipe(
+          R.map(userSession => Number(userSession.dataValues.averageScore)),
+          R.sum,
+          R.flip(R.divide)(R.prop('length', userSessions)),
+        )(userSessions),
+        timeStudied: R.pipe(
+          R.map(userSession => Number(userSession.dataValues.timeStudied)),
+          R.sum
+        )(userSessions),
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: isSequelizeValidationError(error) ? getSequelizeDBErrorMessage(error) : 'Failed in find user session-taking records',
+        errors: isSequelizeValidationError(error) ? formatSequelizeDBErrors(error.errors) : error,
+      },
+    };
+  }
+};
+
+export default {
   create,
+  getSummary,
 };
