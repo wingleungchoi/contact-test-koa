@@ -1,6 +1,6 @@
-const R = require('ramda');
-const faker = require('faker');
-const models = require('src/models');
+import * as R from 'ramda';
+import * as faker from 'faker';
+import * as models from 'src/models';
 
 const sessionFactory = (factory) => {
   factory.define('session', models.session, (buildOptions = {}) => (
@@ -13,4 +13,5 @@ const sessionFactory = (factory) => {
   ));
 };
 
-module.exports = { sessionFactory, };
+export { sessionFactory };
+export default { sessionFactory, };

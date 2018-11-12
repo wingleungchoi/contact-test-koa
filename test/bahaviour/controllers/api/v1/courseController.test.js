@@ -89,4 +89,61 @@ describe('routes: api: v1: course', () => {
       expect(res.body).to.eql(expectResult);
     });
   });
+
+  describe('Get Courses', () => {
+    it('should fetches course lifetime statistics', async () => {
+      const user = await factory.create('user');
+      const course = await factory.create('course');
+      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      const userSession1 = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const userSession2 = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const expectResult = {
+        totalModulesStudied:
+          userSession1.dataValues.totalModulesStudied + userSession2.dataValues.totalModulesStudied,
+        averageScore: (Number(userSession1.dataValues.averageScore) + Number(userSession2.dataValues.averageScore)) / 2,
+        timeStudied: Number(userSession1.dataValues.timeStudied) + Number(userSession2.dataValues.timeStudied),
+      };
+      const res = await chai
+        .request(server)
+        .get(`/api/v1/course/${course.dataValues.id}`)
+        .set('X-User-Id', user.dataValues.id)
+        .send({
+          sessionId: session.dataValues.id,
+          totalModulesStudied: 1,
+          averageScore: 10.1,
+          timeStudied: 1800000,
+        });
+      expect(res.status).to.eql(200);
+      expect(res.type).to.eql('application/json');
+      expect(res.body.data).to.eql(expectResult);
+    });
+
+    it('should return 400 when a user did not take the session', async () => {
+      const user = await factory.create('user');
+      const course = await factory.create('course');
+      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      const expectResult = { message: 'The user does not take the session' };
+      const res = await chai
+        .request(server)
+        .get(`/api/v1/course/${course.dataValues.id}`)
+        .set('X-User-Id', user.dataValues.id)
+        .send({
+          sessionId: session.dataValues.id,
+          totalModulesStudied: 1,
+          averageScore: 10.1,
+          timeStudied: 1800000,
+        });
+      expect(res.status).to.eql(400);
+      expect(res.type).to.eql('application/json');
+      expect(res.body.error).to.eql(expectResult);
+    });
+  });
 });

@@ -1,11 +1,12 @@
-const factoryGirl = require('factory-girl');
+import * as factoryGirl from 'factory-girl';
 
-const { courseFactory } = require('./course');
-const { courseModuleFactory } = require('./courseModule');
-const { sessionFactory } = require('./session');
-const { userFactory } = require('./user');
+import { courseFactory } from 'test/factories/course';
+import { courseModuleFactory } from 'test/factories/courseModule';
+import { sessionFactory } from 'test/factories/session';
+import { userFactory } from 'test/factories/user';
+import { userSessionFactory } from 'test/factories/userSession';
 
-const { factory } = factoryGirl;
+const { factory, } = factoryGirl;
 const adapter = new factoryGirl.SequelizeAdapter();
 factory.setAdapter(adapter);
 
@@ -13,7 +14,12 @@ courseFactory(factory);
 courseModuleFactory(factory);
 sessionFactory(factory);
 userFactory(factory);
+userSessionFactory(factory);
 
-module.exports = {
+export {
+  factory
+};
+
+export default {
   factory,
 };
