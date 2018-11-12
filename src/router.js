@@ -8,6 +8,7 @@ const router = new Router();
 
 const apiV1 = new Router();
 apiV1.post('/course/:courseId', controllers.api.v1.course.createStudyEvent);
+apiV1.get('/course/:courseId', controllers.api.v1.course.getSummaryOfStudyEvent);
 
 router.use(
   '/api/v1',
