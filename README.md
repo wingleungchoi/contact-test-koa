@@ -12,6 +12,7 @@
 - $ NODE_ENV=development node_modules/.bin/sequelize db:migrate
 - $ NODE_ENV=development node_modules/.bin/sequelize db:seed:all
 - $ npm run start
+- Please refer examples folder to test endpoint by CURL
 
 # Building Docker image
 - `docker build -t wingleunchoi/user-statics-test-koa .`
