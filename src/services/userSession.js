@@ -67,7 +67,7 @@ const create = async ({ sessionModel, userSessionModel, }, {
   }
 };
 
-const getSummary = async ({ sessionModel, userSessionModel, }, {
+const getSummaryOfTheCourse = async ({ sessionModel, userSessionModel, }, {
   userId,
   courseId,
 }) => {
@@ -134,5 +134,5 @@ const getSummary = async ({ sessionModel, userSessionModel, }, {
 
 export default {
   create,
-  getSummary,
+  getSummaryOfTheCourse,
 };

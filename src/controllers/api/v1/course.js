@@ -34,7 +34,7 @@ const getSummaryOfStudyEvent = async (ctx) => {
   const { currentUser, } = ctx.app.context;
   const { courseId, } = ctx.params;
 
-  const result = await userSessionService.getSummary({
+  const result = await userSessionService.getSummaryOfTheCourse({
     sessionModel: Models.session,
     userSessionModel: Models.userSession,
   }, {

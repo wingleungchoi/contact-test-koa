@@ -68,7 +68,7 @@ describe('userSessionService', async () => {
     });
   });
 
-  describe('getSummary', async () => {
+  describe('getSummaryOfTheCourse', async () => {
     it('fetches course lifetime statistics', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
@@ -83,7 +83,7 @@ describe('userSessionService', async () => {
         {},
         { sessionId: session.dataValues.id, userId: user.dataValues.id, }
       );
-      const result = await userSessionService.getSummary({
+      const result = await userSessionService.getSummaryOfTheCourse({
         sessionModel: Models.session,
         userSessionModel: Models.userSession,
       }, {
@@ -103,7 +103,7 @@ describe('userSessionService', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
       await factory.create('session', {}, { courseId: course.dataValues.id, });
-      const result = await userSessionService.getSummary({
+      const result = await userSessionService.getSummaryOfTheCourse({
         sessionModel: Models.session,
         userSessionModel: Models.userSession,
       }, {
