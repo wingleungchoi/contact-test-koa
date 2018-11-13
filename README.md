@@ -14,14 +14,14 @@
 - $ npm run start
 - Please refer examples folder to test endpoint by CURL
 
-# Building Docker image
-- `docker build -t wingleunchoi/user-statics-test-koa .`
-
-# Run the image
-- `docker run -p 80:8080 -d wingleunchoi/user-statics-test-koa`
-
 # Steps to test
 1. npm i
 2. NODE_ENV=test node_modules/.bin/sequelize db:create // for test DB creation
 3. NODE_ENV=test node_modules/.bin/sequelize db:migrate // for test DB migration
 4. npm test
+
+# Building Docker image
+- `docker build -t wingleunchoi/user-statics-test-koa .`
+
+# Run the image
+- `docker run -p 80:8080 -d wingleunchoi/user-statics-test-koa`
