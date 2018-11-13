@@ -30,7 +30,7 @@ const createStudyEvent = async (ctx) => {
     : response.error(ctx, (result.error) ? result.error : {});
 };
 
-const getSummaryOfStudyEvent = async (ctx) => {
+const getSummaryOfStudyEventForCourse = async (ctx) => {
   const { currentUser, } = ctx.app.context;
   const { courseId, } = ctx.params;
 
@@ -47,7 +47,26 @@ const getSummaryOfStudyEvent = async (ctx) => {
     : response.error(ctx, (result.error) ? result.error : {});
 };
 
-module.exports = {
+const getSummaryOfStudyEventForSession = async (ctx) => {
+  const { currentUser, } = ctx.app.context;
+  const { courseId, sessionId, } = ctx.params;
+
+  const result = await userSessionService.getSummaryOfOneSession({
+    sessionModel: Models.session,
+    userSessionModel: Models.userSession,
+  }, {
+    userId: currentUser.id,
+    courseId,
+    sessionId,
+  });
+
+  return (result.success)
+    ? response.ok(ctx, result.data)
+    : response.error(ctx, (result.error) ? result.error : {});
+};
+
+export {
   createStudyEvent,
-  getSummaryOfStudyEvent,
+  getSummaryOfStudyEventForCourse,
+  getSummaryOfStudyEventForSession
 };

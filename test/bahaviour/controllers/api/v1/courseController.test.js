@@ -8,7 +8,7 @@ const { expect, } = chai;
 chai.use(chaiHttp);
 
 
-describe('routes: api: v1: course', () => {
+describe('routes: api: v1: courses', () => {
   describe('Post courses', () => {
     it('should persists a session study event and return 201 header when column is correct', async () => {
       const user = await factory.create('user');
@@ -17,7 +17,7 @@ describe('routes: api: v1: course', () => {
       const expectResult = {};
       const res = await chai
         .request(server)
-        .post(`/api/v1/course/${course.dataValues.id}`)
+        .post(`/api/v1/courses/${course.dataValues.id}`)
         .set('X-User-Id', user.dataValues.id)
         .send({
           sessionId: session.dataValues.id,
@@ -45,7 +45,7 @@ describe('routes: api: v1: course', () => {
       };
       const res = await chai
         .request(server)
-        .post(`/api/v1/course/${course.dataValues.id}`)
+        .post(`/api/v1/courses/${course.dataValues.id}`)
         .set('X-User-Id', 'no valid user')
         .send({
           sessionId: session.dataValues.id,
@@ -76,7 +76,7 @@ describe('routes: api: v1: course', () => {
       };
       const res = await chai
         .request(server)
-        .post(`/api/v1/course/${course.dataValues.id}`)
+        .post(`/api/v1/courses/${course.dataValues.id}`)
         .set('X-User-Id', user.dataValues.id)
         .send({
           sessionId: session.dataValues.id,
@@ -113,14 +113,9 @@ describe('routes: api: v1: course', () => {
       };
       const res = await chai
         .request(server)
-        .get(`/api/v1/course/${course.dataValues.id}`)
+        .get(`/api/v1/courses/${course.dataValues.id}`)
         .set('X-User-Id', user.dataValues.id)
-        .send({
-          sessionId: session.dataValues.id,
-          totalModulesStudied: 1,
-          averageScore: 10.1,
-          timeStudied: 1800000,
-        });
+        .send();
       expect(res.status).to.eql(200);
       expect(res.type).to.eql('application/json');
       expect(res.body.data).to.eql(expectResult);
@@ -129,21 +124,54 @@ describe('routes: api: v1: course', () => {
     it('should return 400 when a user did not take the session', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
-      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      await factory.create('session', {}, { courseId: course.dataValues.id, });
       const expectResult = { message: 'The user does not take the course', };
       const res = await chai
         .request(server)
-        .get(`/api/v1/course/${course.dataValues.id}`)
+        .get(`/api/v1/courses/${course.dataValues.id}`)
         .set('X-User-Id', user.dataValues.id)
-        .send({
-          sessionId: session.dataValues.id,
-          totalModulesStudied: 1,
-          averageScore: 10.1,
-          timeStudied: 1800000,
-        });
+        .send();
       expect(res.status).to.eql(400);
       expect(res.type).to.eql('application/json');
       expect(res.body.error).to.eql(expectResult);
+    });
+  });
+
+  describe('Get a session under a course', () => {
+    it('should fetch a single study session', async () => {
+      const user = await factory.create('user');
+      const course = await factory.create('course');
+      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      const session2 = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const userSession2a = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session2.dataValues.id, userId: user.dataValues.id, }
+      );
+      const userSession2b = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session2.dataValues.id, userId: user.dataValues.id, }
+      );
+      const expectResult = {
+        totalModulesStudied:
+          userSession2a.dataValues.totalModulesStudied + userSession2b.dataValues.totalModulesStudied,
+        averageScore: (Number(userSession2a.dataValues.averageScore) + Number(userSession2b.dataValues.averageScore)) / 2,
+        timeStudied: Number(userSession2a.dataValues.timeStudied) + Number(userSession2b.dataValues.timeStudied),
+      };
+      const res = await chai
+        .request(server)
+        .get(`/api/v1/courses/${course.dataValues.id}/sessions/${session2.dataValues.id}`)
+        .set('X-User-Id', user.dataValues.id)
+        .send();
+      expect(res.status).to.eql(200);
+      expect(res.type).to.eql('application/json');
+      expect(res.body.data).to.eql(expectResult);
     });
   });
 });
