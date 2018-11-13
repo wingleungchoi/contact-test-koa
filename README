@@ -5,6 +5,11 @@
 - $ npm i
 - $ cp .env-sample .env
 - update the .env file
+- $ cp src/config/config-sample.json src/config/config.json
+- update src/config/config.json
+- $ NODE_ENV=development node_modules/.bin/sequelize db:create
+- $ NODE_ENV=development node_modules/.bin/sequelize db:migrate
+- $ NODE_ENV=development node_modules/.bin/sequelize db:seed:all
 - $ npm run start
 
 # Building Docker image

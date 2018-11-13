@@ -23,7 +23,15 @@ export default (sequelize, DATA_TYPES) => {
     models.session.hasMany(
       models.courseModule,
       {
-        as: { singular: 'courseModule', plural: 'courseModules' },
+        as: { singular: 'courseModule', plural: 'courseModules', },
+        foreignKey: 'sessionId',
+      },
+    );
+
+    models.session.hasMany(
+      models.userSession,
+      {
+        as: { singular: 'userSession', plural: 'userSessions', },
         foreignKey: 'sessionId',
       },
     );

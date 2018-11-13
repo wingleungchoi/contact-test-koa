@@ -12,7 +12,7 @@ export default (sequelize, DATA_TYPES) => {
     models.user.hasMany(
       models.userSession,
       {
-        as: { singular: 'userSession', plural: 'userSessions' },
+        as: { singular: 'userSession', plural: 'userSessions', },
         foreignKey: 'userId',
       },
     );
