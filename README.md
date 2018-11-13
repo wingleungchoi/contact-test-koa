@@ -1,4 +1,5 @@
 # To start up
+- require: PostgreSQL
 - require: node verson v8.10.0
 - $ git clone git@github.com:wingleungchoi/user-statics-test-koa.git
 - $ cd user-statics-test-koa
