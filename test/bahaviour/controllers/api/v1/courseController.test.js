@@ -130,7 +130,7 @@ describe('routes: api: v1: course', () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
       const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
-      const expectResult = { message: 'The user does not take the session' };
+      const expectResult = { message: 'The user does not take the course', };
       const res = await chai
         .request(server)
         .get(`/api/v1/course/${course.dataValues.id}`)

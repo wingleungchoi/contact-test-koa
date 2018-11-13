@@ -9,7 +9,7 @@ describe('userSessionService', async () => {
     // clean up factory mock data
   });
 
-  describe('create', async () => {
+  describe('#create', async () => {
     it('should return success is true when it succeeds', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
@@ -68,7 +68,7 @@ describe('userSessionService', async () => {
     });
   });
 
-  describe('getSummaryOfTheCourse', async () => {
+  describe('#getSummaryOfTheCourse', async () => {
     it('fetches course lifetime statistics', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
@@ -99,7 +99,7 @@ describe('userSessionService', async () => {
       });
     });
 
-    it('return errors when a user did not take any session', async () => {
+    it('return errors when a user did not take any session of the course', async () => {
       const user = await factory.create('user');
       const course = await factory.create('course');
       await factory.create('session', {}, { courseId: course.dataValues.id, });
@@ -109,6 +109,69 @@ describe('userSessionService', async () => {
       }, {
         userId: user.dataValues.id,
         courseId: course.dataValues.id,
+      });
+      expect(result.success).to.equal(false);
+      expect(result.error).to.eql({
+        message: 'The user does not take the course',
+      });
+    });
+  });
+
+  describe('#getSummaryOfOneSession', async () => {
+    it('fetches a single study session', async () => {
+      const user = await factory.create('user');
+      const course = await factory.create('course');
+      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      const session2 = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const userSession2a = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session2.dataValues.id, userId: user.dataValues.id, }
+      );
+      const userSession2b = await factory.create(
+        'userSession',
+        {},
+        { sessionId: session2.dataValues.id, userId: user.dataValues.id, }
+      );
+      const result = await userSessionService.getSummaryOfOneSession({
+        sessionModel: Models.session,
+        userSessionModel: Models.userSession,
+      }, {
+        userId: user.dataValues.id,
+        courseId: course.dataValues.id,
+        sessionId: session2.dataValues.id,
+      });
+      expect(result.success).to.equal(true);
+      expect(result.data).to.eql({
+        totalModulesStudied:
+          userSession2a.dataValues.totalModulesStudied + userSession2b.dataValues.totalModulesStudied,
+        averageScore: (Number(userSession2a.dataValues.averageScore) + Number(userSession2b.dataValues.averageScore)) / 2,
+        timeStudied: Number(userSession2a.dataValues.timeStudied) + Number(userSession2b.dataValues.timeStudied),
+      });
+    });
+
+    it('return errors when a user did not take the session', async () => {
+      const user = await factory.create('user');
+      const course = await factory.create('course');
+      const session = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      const session2 = await factory.create('session', {}, { courseId: course.dataValues.id, });
+      await factory.create(
+        'userSession',
+        {},
+        { sessionId: session.dataValues.id, userId: user.dataValues.id, }
+      );
+      const result = await userSessionService.getSummaryOfOneSession({
+        sessionModel: Models.session,
+        userSessionModel: Models.userSession,
+      }, {
+        userId: user.dataValues.id,
+        courseId: course.dataValues.id,
+        sessionId: session2.dataValues.id,
       });
       expect(result.success).to.equal(false);
       expect(result.error).to.eql({
