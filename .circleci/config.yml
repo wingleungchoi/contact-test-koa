@@ -9,7 +9,7 @@ jobs: # a collection of steps
       - run:
           name: prepare-config
           command: |
-            echo "{\"test\": {\"username\": \"postgres\",\"password\": null,\"database\": \"ttt_contract_database_test\",\"host\": \"127.0.0.1\",\"dialect\": \"postgres\"}}" > src/config/config.json
+            echo "{\"test\": {\"username\": \"postgres\",\"password\": null,\"database\": \"ttt_contact_database_test\",\"host\": \"127.0.0.1\",\"dialect\": \"postgres\"}}" > src/config/config.json
       - run:
           name: update-npm 
           command: 'sudo npm install -g npm@latest'
