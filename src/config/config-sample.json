@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
+    "username": null,
     "password": null,
-    "database": "seneca_database_development",
+    "database": "ttt_contact_database_development",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
+    "username": null,
     "password": null,
-    "database": "seneca_database_test",
+    "database": "ttt_contact_database_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "production": {
-    "username": "root",
+    "username": null,
     "password": null,
-    "database": "seneca_database_production",
+    "database": "ttt_contact_database_production",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   }
 }
