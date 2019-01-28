@@ -1,8 +1,8 @@
 # To start up
 - require: PostgreSQL
 - require: node verson v8.10.0
-- `$ git clone git@github.com:wingleungchoi/user-statics-test-koa.git`
-- `$ cd user-statics-test-koa`
+- `$ git clone git@github.com:wingleungchoi/contract-test-koa.git`
+- `$ cd contract-test-koa`
 - `$ npm i`
 - `$ cp .env-sample .env`
 - update the .env file
@@ -21,7 +21,7 @@
 4. `npm test`
 
 # Building Docker image
-- `docker build -t wingleunchoi/user-statics-test-koa .`
+- `docker build -t wingleunchoi/contract-test-koa .`
 
 # Run the image
-- `docker run -p 80:8080 -d wingleunchoi/user-statics-test-koa`
+- `docker run -p 80:8080 -d wingleunchoi/contract-test-koa`
