@@ -7,13 +7,14 @@
     "babel-node": "NODE_PATH=. ./node_modules/.bin/babel-node index.js",
     "dev": "NODE_PATH=. nodemon --exec npm run babel-node -- index.js",
     "start": "NODE_PATH=. babel-node index.js",
-    "test": "NODE_PATH=. nyc ./node_modules/mocha/bin/mocha --opts test/mocha.opts",
+    "test": "NODE_PATH=. ./node_modules/mocha/bin/mocha debug --opts test/mocha.opts",
     "check-style": "./node_modules/.bin/eslint src/**/*.js"
   },
   "author": "wingleungchoi",
   "license": "MIT",
   "dependencies": {
     "@koa/cors": "^2.2.2",
+    "crypto-js": "^3.1.9-1",
     "dotenv": "^6.1.0",
     "koa": "^2.5.3",
     "koa-body": "^4.0.4",

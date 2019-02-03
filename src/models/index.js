@@ -1,10 +1,6 @@
 import Sequelize from 'sequelize';
 import * as configs from 'src/config/config.json';
-import user from 'src/models/user';
-import course from 'src/models/course';
-import session from 'src/models/session';
-import courseModule from 'src/models/courseModule';
-import userSession from 'src/models/userSession';
+import contact from 'src/models/contact';
 
 const config = configs[process.env.NODE_ENV || 'development'];
 
@@ -16,11 +12,7 @@ const DATA_TYPES = Sequelize;
 const db = {
   sequelize,
   Sequelize,
-  user: user(sequelize, DATA_TYPES),
-  course: course(sequelize, DATA_TYPES),
-  session: session(sequelize, DATA_TYPES),
-  courseModule: courseModule(sequelize, DATA_TYPES),
-  userSession: userSession(sequelize, DATA_TYPES),
+  contact: contact(sequelize, DATA_TYPES),
 };
 
 Object.keys(db).forEach((modelName) => {

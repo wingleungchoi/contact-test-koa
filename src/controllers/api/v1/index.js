@@ -1,9 +1,9 @@
-import * as course from 'src/controllers/api/v1/course';
+import contact from 'src/controllers/api/v1/contact';
 
 export {
-  course
+  contact
 };
 
 export default {
-  course,
+  contact,
 };
